@@ -9,10 +9,11 @@ async function get(path, params = {}) {
 }
 
 export const api = {
-  equipos: (params) => get('/equipos', params),
-  equipo: (id) => get(`/equipos/${id}`),
-  ordenes: (params) => get('/ordenes', params),
-  fallas: (params) => get('/fallas', params),
-  kpis: (params) => get('/kpis', params),
-  ubicaciones: () => get('/ubicaciones'),
+  discover: (params) => get('/sap-discover', params),
+  equipos: (params) => get('/sap-equipos', params),
+  equipo: (id) => get('/sap-equipo', { id }),
+  ordenes: (params) => get('/sap-ordenes', params),
+  fallas: (params) => get('/sap-fallas', params),
+  kpis: (params) => get('/sap-kpis', params),
+  ubicaciones: () => get('/sap-ubicaciones'),
 };
