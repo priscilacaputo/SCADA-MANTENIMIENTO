@@ -51,6 +51,26 @@ function cached(key, fn) {
   });
 }
 
+// ── Descubrimiento de servicios OData disponibles ───────────────────────────
+
+app.get('/api/discover', async (req, res) => {
+  try {
+    const { keyword = 'MAINT' } = req.query;
+    const r = await sapClient.get('/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/ServiceCollection', {
+      params: {
+        $format: 'json',
+        $top: 200,
+        $filter: keyword ? `substringof('${keyword}',TechnicalServiceName)` : undefined,
+        $select: 'TechnicalServiceName,ServiceDescription,ServiceVersion',
+      },
+    });
+    res.json(r.data.d?.results ?? []);
+  } catch (err) {
+    console.error('[/api/discover]', err.response?.status, err.message);
+    res.status(500).json({ error: err.message, status: err.response?.status });
+  }
+});
+
 // ── Rutas SAP ────────────────────────────────────────────────────────────────
 
 // GET /api/equipos — lista de equipos
